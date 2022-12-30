@@ -9,8 +9,10 @@ import (
 	"strings"
 )
 
+const stringToFind = "Go"
+const method = "GET"
+
 func CountingURL(url string) (c uint64, err error) {
-	method := "GET"
 
 	client := &http.Client{}
 	req, reqErr := http.NewRequest(method, url, nil)
@@ -34,7 +36,7 @@ func CountingURL(url string) (c uint64, err error) {
 	if readErr != nil {
 		return 0, resErr
 	}
-	count := strings.Count(string(body), "Go")
+	count := strings.Count(string(body), stringToFind)
 	return uint64(count), nil
 }
 
@@ -56,6 +58,6 @@ func CountingFile(filename string) (c uint64, err error) {
 		return 0, fmt.Errorf("reading file(%s) error: %w", filename, readErr)
 	}
 
-	count := strings.Count(string(fileContent), "Go")
+	count := strings.Count(string(fileContent), stringToFind)
 	return uint64(count), nil
 }

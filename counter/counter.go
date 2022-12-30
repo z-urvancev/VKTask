@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"net/url"
 	"sync"
 	"sync/atomic"
@@ -25,7 +24,7 @@ func NewCounter(k uint, writer io.Writer) *Counter {
 	}
 }
 
-func (c *Counter) Execute(r io.Reader) error {
+func (c *Counter) Execute(r io.Reader) (returnedErr error) {
 	scanner := bufio.NewScanner(r)
 	var total uint64
 	for scanner.Scan() {
@@ -39,12 +38,14 @@ func (c *Counter) Execute(r io.Reader) error {
 			}()
 			count, err := counting(str)
 			if err != nil {
-				log.Fatalln("counting error: ", err)
+				returnedErr = fmt.Errorf("counting error: %w", err)
+				return
 			}
 			atomic.AddUint64(&total, count)
 			_, err = fmt.Fprintf(c.writer, "Count for %s: %d\n", str, count)
 			if err != nil {
-				log.Fatalln("output error: ", err)
+				returnedErr = fmt.Errorf("output error: %w", err)
+				return
 			}
 		}(str, c)
 	}
