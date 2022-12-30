@@ -1,9 +1,9 @@
 package counter
 
 import (
-	"TestVK/analyze"
 	"bufio"
 	"fmt"
+	"github.com/z-urvancev/go-counter/analyze"
 	"io"
 	"net/url"
 	"sync"
@@ -24,7 +24,7 @@ func NewCounter(k uint, writer io.Writer) *Counter {
 	}
 }
 
-func (c *Counter) Execute(r io.Reader) (returnedErr error) {
+func (c *Counter) Execute(r io.Reader) error {
 	scanner := bufio.NewScanner(r)
 	var total uint64
 	for scanner.Scan() {
@@ -38,29 +38,29 @@ func (c *Counter) Execute(r io.Reader) (returnedErr error) {
 			}()
 			count, err := counting(str)
 			if err != nil {
-				returnedErr = fmt.Errorf("counting error: %w", err)
+				fmt.Println(err.Error())
 				return
 			}
 			atomic.AddUint64(&total, count)
 			_, err = fmt.Fprintf(c.writer, "Count for %s: %d\n", str, count)
 			if err != nil {
-				returnedErr = fmt.Errorf("output error: %w", err)
-				return
+				fmt.Println("output error: ", err.Error())
 			}
 		}(str, c)
 	}
+
+	c.wg.Wait()
 
 	if scanner.Err() != nil {
 		return fmt.Errorf("scanner error: %w", scanner.Err())
 	}
 
-	c.wg.Wait()
 	_, err := fmt.Fprintln(c.writer, "Total: ", total)
 	if err != nil {
 		return fmt.Errorf("output error: %w", err)
 	}
 
-	return scanner.Err()
+	return nil
 }
 
 func counting(str string) (uint64, error) {

@@ -1,7 +1,7 @@
-Count for ./file1.txt: 5
-Count for ./file4.txt: 0
 Count for ./file2.txt: 0
+Count for ./file1.txt: 5
 Count for ./file3.txt: 9
 Count for ./file5.txt: 1
+Count for ./file4.txt: 0
 Count for https://golang.org: 225
 Total:  240
