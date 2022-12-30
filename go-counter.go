@@ -29,7 +29,7 @@ func main() {
 	flag.Parse()
 
 	if helpFlag {
-		fmt.Println("Usage:\ngo-generate [--help] [--input=<input_file_name>] [--output=<output_file_name>]\nFlags:\n--help - help for go-counter\n--input string - input file. By default use stdin\n--output string - output file. By default use stdout")
+		fmt.Println("Usage:\ngo-counter [--help] [--input=<input_file_name>] [--output=<output_file_name>]\nFlags:\n--help - help for go-counter\n--input string - input file. By default use stdin\n--output string - output file. By default use stdout")
 		return
 	}
 

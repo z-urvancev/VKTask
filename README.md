@@ -10,6 +10,6 @@
 
 <h4>Вызов утилиты:</h4>
 
-`go-generate [--help] [--input=<input_file_name>] [--output=<output_file_name>]`
+`go-counter [--help] [--input=<input_file_name>] [--output=<output_file_name>]`
 
 Без введенных входного и выходного файлов используются `stdin` и `stdout`
